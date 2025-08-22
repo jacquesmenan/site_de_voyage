@@ -1,0 +1,253 @@
+/* Page de Paiement */
+.paiement-section {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+    min-height: calc(100vh - 200px);
+}
+
+.paiement-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.paiement-details {
+    flex: 1;
+    min-width: 300px;
+    padding: 40px;
+    background-color: #0A1A2F;
+    color: #fff;
+}
+
+.paiement-details h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.paiement-description {
+    color: #CFAF6E;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.produit-resume {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.produit-resume h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #CFAF6E;
+}
+
+.produit-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.produit-nom {
+    color: #f0f0f0;
+}
+
+.produit-prix {
+    font-weight: 600;
+    color: #fff;
+}
+
+.produit-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.paiement-methodes {
+    margin-bottom: 30px;
+}
+
+.paiement-methodes h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #CFAF6E;
+}
+
+.carte-credit,
+.paypal {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carte-credit:hover,
+.paypal:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.carte-credit.active {
+    background: rgba(207, 175, 110, 0.2);
+    border: 1px solid #CFAF6E;
+}
+
+.carte-credit i,
+.paypal i {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    color: #CFAF6E;
+}
+
+.paypal i {
+    color: #253B80;
+}
+
+.securite-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.securite-info i {
+    margin-right: 10px;
+    color: #4CAF50;
+}
+
+.paiement-formulaire {
+    flex: 1;
+    min-width: 300px;
+    padding: 40px;
+}
+
+.StripeElement {
+    box-sizing: border-box;
+    height: 50px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.StripeElement--focus {
+    border-color: #CFAF6E;
+    box-shadow: 0 0 0 2px rgba(207, 175, 110, 0.2);
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+
+#card-errors {
+    color: #fa755a;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    min-height: 24px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.paiement-securise {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 20px;
+}
+
+.paiement-securise i {
+    color: #4CAF50;
+    margin-right: 5px;
+}
+
+.paiement-logos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.paiement-logos img {
+    height: 30px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.paiement-logos img:hover {
+    opacity: 1;
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .paiement-container {
+        flex-direction: column;
+    }
+    
+    .paiement-details,
+    .paiement-formulaire {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .paiement-details,
+    .paiement-formulaire {
+        padding: 25px;
+    }
+    
+    .paiement-details h1 {
+        font-size: 1.8rem;
+    }
+}
