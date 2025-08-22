@@ -1,0 +1,61 @@
+# Fichier robots.txt pour Cédric Dubai Solutions
+# Dernière mise à jour : 2023-10-20
+
+User-agent: *
+Allow: /
+
+# Fichiers et dossiers à ne pas explorer
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /node_modules/
+Disallow: /vendor/
+Disallow: /uploads/
+
+# Fichiers à ne pas explorer
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Paramètres d'URL à ignorer
+Disallow: /*?*
+Disallow: /*&*
+
+# Sitemap
+Sitemap: https://www.cedricdubaisolutions.com/sitemap.xml
+
+# Paramètres pour les moteurs de recherche spécifiques
+# Google
+User-agent: Googlebot
+Allow: /*.css$
+Allow: /*.js$
+
+# Bing
+User-agent: bingbot
+Crawl-delay: 5
+
+# Yandex
+User-agent: Yandex
+Disallow: /admin/
+Disallow: /api/
+
+# Blocage des images indésirables
+User-agent: Googlebot-Image
+Disallow: /img/private/
+
+# Blocage des vidéos indésirables
+User-agent: Googlebot-Video
+Disallow: /videos/private/
+
+# Blocage des fichiers indésirables
+User-agent: Mediapartners-Google
+Disallow: /
+
+# Blocage des publicités
+User-agent: AdsBot-Google
+Disallow: /admin/
+
+# Vitesse de crawl (1 requête toutes les 5 secondes)
+User-agent: *
+Crawl-delay: 5

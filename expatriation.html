@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack Expatriation Dubaï - Cédric Dubai Solutions</title>
+    <meta name="description" content="Découvrez notre Pack Expatriation Dubaï à 79€. Votre guide complet pour vous installer sereinement à Dubaï avec l'aide d'un expert local.">
+    
+    <!-- Schema.org markup for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Pack Expatriation Dubaï",
+      "description": "Votre guide complet pour vous installer sereinement à Dubaï avec l'aide d'un expert local.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Cédric Dubai Solutions"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://www.cedricdubai.com/expatriation.html",
+        "priceCurrency": "EUR",
+        "price": "79",
+        "availability": "https://schema.org/InStock",
+        "priceValidUntil": "2025-12-31"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "89"
+      }
+    }
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/logo.jpg">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.min.css">
+    
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.92) 0%, rgba(10, 26, 47, 0.85) 100%), 
+                        url('assets/images/dubai-expat.jpg') no-repeat center center/cover;
+            color: white;
+            padding: 200px 0 140px;
+            text-align: center;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            animation: gradientShift 12s ease infinite;
+            background-blend-mode: overlay;
+            transform: translateZ(0);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #CFAF6E, #e8c98a, #CFAF6E);
+            z-index: 2;
+        }
+        
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent, #f8f9fa);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.3s;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.5px;
+        }
+        
+        .page-header p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            line-height: 1.6;
+        }
+        
+        .price-tag {
+            font-size: 3rem;
+            color: #CFAF6E;
+            margin: 2rem 0;
+            font-weight: 700;
+            display: inline-block;
+            position: relative;
+            padding: 0.5rem 2rem;
+            background: rgba(207, 175, 110, 0.1);
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.5s;
+        }
+        
+        .btn-primary {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.7s;
+        }
+        
+        .package-details {
+            padding: 6rem 0;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+        
+        .package-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .package-features {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eaeaea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .package-features:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .package-description {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eaeaea;
+        }
+        
+        .feature-item {
+            display: flex;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .feature-item:hover {
+            background: #fff;
+            border-color: #e0e0e0;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-icon {
+            color: #CFAF6E;
+            margin-right: 1.25rem;
+            font-size: 1.5rem;
+            min-width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(207, 175, 110, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover .feature-icon {
+            background: #CFAF6E;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 992px) {
+            .package-grid {
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .package-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .package-features {
+                position: static;
+                margin-top: 2rem;
+            }
+            
+            .feature-item {
+                padding: 1rem;
+            }
+            
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpg" alt="Cédric Dubai Solutions" width="200" height="60">
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="voyage.html">Pack Voyage</a>
+                    <a href="expatriation.html" class="active">Pack Expatriation</a>
+                    <a href="a-propos.html">À propos</a>
+                    <a href="contact.html" class="btn btn-outline">Contact</a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Pack Expatriation Dubaï</h1>
+            <p>Votre installation clé en main à Dubaï avec l'accompagnement d'un expert local</p>
+            <div class="price-tag">Seulement 79€</div>
+            <a href="#purchase" class="btn btn-primary">Acheter maintenant</a>
+        </div>
+    </section>
+
+    <!-- Package Details -->
+    <section class="package-details">
+        <div class="container">
+            <div class="section-header">
+                <h2>Votre installation réussie à Dubaï</h2>
+                <p>Tout ce dont vous avez besoin pour une expatriation sereine</p>
+            </div>
+            
+            <div class="package-grid">
+                <div class="package-description">
+                    <div class="package-image" style="margin: 0 auto 3rem auto; max-width: 800px; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <img 
+                            src="assets/acceuille voyage.jpg" 
+                            alt="Découvrez l'expatriation à Dubaï avec nous - Votre nouvelle vie commence ici" 
+                            style="width: 100%; height: auto; display: block; transition: transform 0.5s ease;"
+                            onmouseover="this.style.transform='scale(1.03)'"
+                            onmouseout="this.style.transform='scale(1)'"
+                        >
+                        <div style="background: linear-gradient(90deg, #CFAF6E, #e0c07f); height: 4px; width: 100%;"></div>
+                    </div>
+                    <h3>Votre Guide Complet pour une Expatriation Réussie</h3>
+                    <p>Notre Pack Expatriation Dubaï est conçu pour vous accompagner à chaque étape de votre installation, des formalités administratives à votre intégration professionnelle et sociale.</p>
+                    
+                    <h4>Formalités Administratives</h4>
+                    <ul>
+                        <li>Processus complet d'obtention du visa de résidence</li>
+                        <li>Ouvrir un compte bancaire local</li>
+                        <li>Assurance santé obligatoire et complémentaire</li>
+                        <li>Permis de conduire et achat/lois de voiture</li>
+                        <li>Équivalence de diplômes</li>
+                    </ul>
+                    
+                    <h4>Vie Pratique</h4>
+                    <ul>
+                        <li>Trouver un logement : quartiers, agences, contrats</li>
+                        <li>Écoles internationales et garde d'enfants</li>
+                        <li>Coût de la vie et gestion du budget</li>
+                        <li>Transports en commun et mobilité</li>
+                        <li>Services essentiels (électricité, eau, internet, téléphonie)</li>
+                    </ul>
+                    
+                    <h4>Intégration Professionnelle</h4>
+                    <ul>
+                        <li>Marché du travail et secteurs porteurs</li>
+                        <li>CV et entretiens à l'international</li>
+                        <li>Création d'entreprise à Dubaï</li>
+                        <li>Réseautage et événements professionnels</li>
+                        <li>Fiscalité des expatriés</li>
+                    </ul>
+                </div>
+                
+                <div class="package-features">
+                    <h3>Votre Pack Comprend</h3>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                        <div>
+                            <h4>Guide Administratif Complet</h4>
+                            <p>Toutes les démarches expliquées étape par étape.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-home"></i></div>
+                        <div>
+                            <h4>Recherche de Logement</h4>
+                            <p>Conseils pour trouver le logement idéal selon votre budget.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                        <div>
+                            <h4>Accès au Marché du Travail</h4>
+                            <p>Conseils pour trouver un emploi ou créer votre entreprise.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <div>
+                            <h4>Réseau d'Expatriés</h4>
+                            <p>Accès à une communauté d'expatriés et d'experts locaux.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                        <div>
+                            <h4>Assistance Personnalisée</h4>
+                            <p>Réponses à vos questions avant et après votre arrivée.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="purchase" style="margin-top: 2rem; padding: 2rem; background: white; border-radius: 8px; text-align: center;">
+                        <h3>Obtenez votre Pack Expatriation</h3>
+                        <div class="price-tag">79€</div>
+                        <p>Paiement sécurisé - Accès immédiat</p>
+                        <a href="#" class="btn btn-primary" style="display: block; margin: 1.5rem 0;">Acheter maintenant</a>
+                        <p style="font-size: 0.9rem; color: #666;">
+                            <i class="fas fa-lock"></i> Paiement sécurisé
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" style="background-color: #f8f9fa; padding: 5rem 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Témoignages d'Expatriés</h2>
+                <p>Ils ont réussi leur installation grâce à notre accompagnement</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Le Pack Expatriation m'a sauvé des mois de galères administratives. Tout était clairement expliqué et j'ai pu m'installer en toute sérénité."</p>
+                    <div style="display: flex; align-items: center;">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Marie D." style="width: 50px; height: 50px; border-radius: 50%; margin-right: 1rem;">
+                        <div>
+                            <h5 style="margin: 0;">Marie D.</h5>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #666;">Expatriée depuis 2023</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Grâce aux conseils du pack, j'ai pu trouver un logement idéal et m'intégrer rapidement. L'assistance personnalisée a fait toute la différence !"</p>
+                    <div style="display: flex; align-items: center;">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Thomas L." style="width: 50px; height: 50px; border-radius: 50%; margin-right: 1rem;">
+                        <div>
+                            <h5 style="margin: 0;">Thomas L.</h5>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #666;">Expatrié depuis 2024</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"En tant que famille, l'aide pour les écoles et les activités pour enfants a été inestimable. Un investissement qui nous a fait gagner un temps précieux."</p>
+                    <div style="display: flex; align-items: center;">
+                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Sophie M." style="width: 50px; height: 50px; border-radius: 50%; margin-right: 1rem;">
+                        <div>
+                            <h5 style="margin: 0;">Sophie M.</h5>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #666;">Famille expatriée depuis 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" style="padding: 5rem 0;">
+        <div class="container" style="max-width: 800px; margin: 0 auto;">
+            <div class="section-header">
+                <h2>Questions Fréquentes</h2>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <div style="margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem;">Quelle est la différence avec le Pack Voyage ?</h4>
+                    <p style="color: #666; line-height: 1.6;">Le Pack Expatriation est spécialement conçu pour les personnes qui souhaitent s'installer à long terme à Dubaï. Il couvre des aspects comme l'installation, la recherche de travail, les écoles, et d'autres besoins spécifiques aux résidents.</p>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem;">Pendant combien de temps puis-je bénéficier de l'assistance ?</h4>
+                    <p style="color: #666; line-height: 1.6;">L'assistance est disponible pendant les 3 premiers mois suivant votre achat, ce qui couvre généralement la période critique d'installation. Vous pouvez également opter pour un accompagnement prolongé si nécessaire.</p>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem;">Puis-je poser des questions spécifiques à ma situation ?</h4>
+                    <p style="color: #666; line-height: 1.6;">Absolument ! Notre accompagnement est personnalisé en fonction de votre situation familiale, professionnelle et de vos objectifs à Dubaï.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3>Prêt à commencer votre nouvelle vie à Dubaï ?</h3>
+                <p>Obtenez votre Pack Expatriation maintenant et préparez votre installation en toute sérénité.</p>
+                <a href="#purchase" class="btn btn-primary" style="margin-top: 1.5rem;">Acheter pour 79€</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <img src="assets/images/logo-white.png" alt="Cédric Dubai Solutions" class="footer-logo">
+                    <p>Votre partenaire de confiance pour votre expatriation à Dubaï.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1GYE2zomnX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/cedric_a_dubai" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="d-none d-md-inline-block"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@cedric.dubai?_t=ZS-8ynSOgdraWw&_r=1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="voyage.html">Pack Voyage</a></li>
+                        <li><a href="expatriation.html">Pack Expatriation</a></li>
+                        <li><a href="a-propos.html">À propos</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> albhexatrading@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> +971 52 117 8780</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dubaï, Émirats Arabes Unis</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Cédric Dubai Solutions. Tous droits réservés.</p>
+                <div class="legal-links">
+                    <a href="mentions-legales.html">Mentions Légales</a>
+                    <a href="politique-confidentialite.html">Confidentialité</a>
+                    <a href="cgv.html">CGV</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Service MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-securepassword}
+      MONGO_INITDB_DATABASE: ${DB_NAME:-cedricdubai}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "'db.runCommand({ ping: 1 })'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Interface d'administration MongoDB (Mongo Express)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USER:-admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD:-securepassword}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+    depends_on:
+      - mongodb
+    links:
+      - mongodb:mongodb
+
+  # Redis pour la mise en cache et les sessions
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # Service MailHog pour le développement (intercepte les emails)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+    restart: always
+
+# Volumes pour la persistance des données
+volumes:
+  mongodb_data:
+    name: cedricdubai_mongodb_data
+  redis_data:
+    name: cedricdubai_redis_data
+
+# Réseau personnalisé pour une meilleure isolation
+networks:
+  default:
+    name: cedricdubai_network

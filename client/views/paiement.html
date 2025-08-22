@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement sécurisé - Cédric Dubai Solutions</title>
+    <meta name="description" content="Paiement sécurisé pour votre pack voyage ou expatriation à Dubaï.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/paiement.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpg.jpg" alt="Cédric Dubai Solutions">
+                    <span class="logo-text">Cédric Dubai Solutions</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="voyage.html">Pack Voyage</a>
+                    <a href="expatriation.html">Pack Expatriation</a>
+                    <a href="a-propos.html">À propos</a>
+                    <a href="contact.html" class="btn btn-outline">Contact</a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Paiement Section -->
+    <section class="paiement-section">
+        <div class="container">
+            <div class="paiement-container">
+                <div class="paiement-details">
+                    <h1>Paiement sécurisé</h1>
+                    <p class="paiement-description">Finalisez votre commande en toute sécurité</p>
+                    
+                    <div class="produit-resume">
+                        <h3>Récapitulatif de votre commande</h3>
+                        <div class="produit-item">
+                            <div class="produit-nom" id="produit-nom">Pack Voyage Dubaï</div>
+                            <div class="produit-prix" id="produit-prix">49 €</div>
+                        </div>
+                        <div class="produit-total">
+                            <span>Total</span>
+                            <span id="total-commande">49 €</span>
+                        </div>
+                    </div>
+                    
+                    <div class="paiement-methodes">
+                        <h3>Moyen de paiement</h3>
+                        <div class="carte-credit active">
+                            <i class="far fa-credit-card"></i>
+                            <span>Carte de crédit</span>
+                        </div>
+                        <div class="paypal">
+                            <i class="fab fa-cc-paypal"></i>
+                            <span>PayPal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="securite-info">
+                        <i class="fas fa-lock"></i>
+                        <span>Paiement sécurisé et crypté</span>
+                    </div>
+                </div>
+                
+                <div class="paiement-formulaire">
+                    <form id="payment-form">
+                        <div id="card-element">
+                            <!-- Elements will create form elements here -->
+                        </div>
+                        
+                        <div id="card-errors" role="alert"></div>
+                        
+                        <button type="submit" id="submit-button" class="btn btn-primary btn-block">
+                            <span id="button-text">Payer maintenant</span>
+                            <div id="spinner" class="spinner hidden"></div>
+                        </button>
+                        
+                        <p class="paiement-securise">
+                            <i class="fas fa-shield-alt"></i>
+                            Vos données sont sécurisées et cryptées
+                        </p>
+                    </form>
+                    
+                    <div class="paiement-logos">
+                        <img src="assets/images/visa.png" alt="Visa">
+                        <img src="assets/images/mastercard.png" alt="Mastercard">
+                        <img src="assets/images/cb.png" alt="CB">
+                        <img src="assets/images/apple-pay.png" alt="Apple Pay">
+                        <img src="assets/images/google-pay.png" alt="Google Pay">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <img src="assets/images/logo-white.png" alt="Cédric Dubai Solutions" class="footer-logo">
+                    <p>Votre partenaire de confiance pour votre voyage ou votre expatriation à Dubaï.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="voyage.html">Pack Voyage</a></li>
+                        <li><a href="expatriation.html">Pack Expatriation</a></li>
+                        <li><a href="a-propos.html">À propos</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> albhexatrading@gmail.com</p>
+                    <p><i class="fab fa-whatsapp"></i> +971 52 117 8780</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Dubaï, Émirats Arabes Unis</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Cédric Dubai Solutions. Tous droits réservés.</p>
+                <div class="legal-links">
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="confidentialite.html">Politique de confidentialité</a>
+                    <a href="cookies.html">Politique des cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/paiement.js"></script>
+</body>
+</html>

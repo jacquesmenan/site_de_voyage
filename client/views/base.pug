@@ -1,0 +1,136 @@
+//- Fichier de base pour toutes les pages du site
+//- Inclut les métadonnées SEO, les polices, les styles et les scripts communs
+
+//- Variables par défaut pour le SEO
+- const defaultTitle = 'Cédric Dubai Solutions | Votre expert pour Dubaï';
+- const defaultDescription = 'Découvrez des expériences uniques à Dubaï avec Cédric Dubai Solutions. Forfaits voyage et services d\'expatriation sur mesure.';
+- const defaultKeywords = 'Dubaï, voyage, expatriation, forfaits, tourisme, conseils, Cédric Dubai Solutions';
+- const defaultImage = 'https://www.cedricdubaisolutions.com/img/og-image.jpg';
+- const siteUrl = 'https://www.cedricdubaisolutions.com';
+
+//- Fusionner les métadonnées fournies avec les valeurs par défaut
+- const seo = Object.assign({
+-   title: defaultTitle,
+-   description: defaultDescription,
+-   keywords: defaultKeywords,
+-   image: defaultImage,
+-   url: siteUrl,
+-   type: 'website'
+- }, seo || {});
+
+doctype html
+html(lang='fr')
+  head
+    //- Inclure le composant SEO avec les métadonnées
+    include components/_seo
+    +seo(seo)
+    
+    //- Préchargement des polices
+    link(rel='preload' as='font' type='font/woff2' href='/fonts/montserrat-v15-latin-regular.woff2' crossorigin)
+    link(rel='preload' as='font' type='font/woff2' href='/fonts/open-sans-v20-latin-regular.woff2' crossorigin)
+    
+    //- Préchargement des ressources critiques
+    link(rel='preload' as='style' href='/css/style.css')
+    
+    //- Feuilles de style
+    link(rel='stylesheet' href='/css/style.css')
+    
+    //- Scripts asynchrones et différés
+    script(defer src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous')
+    script(defer src='/js/main.js')
+    
+    //- Script d'analyse (chargement optimisé)
+    script(defer src='/js/analytics.js')
+    
+    //- Balises pour les réseaux sociaux
+    meta(property='og:site_name' content='Cédric Dubai Solutions')
+    meta(property='og:type' content='website')
+    meta(property='og:locale' content='fr_FR')
+    
+    //- Balises pour les cartes Twitter
+    meta(name='twitter:card' content='summary_large_image')
+    meta(name='twitter:site' content='@cedricdubai')
+    meta(name='twitter:creator' content='@cedricdubai')
+    
+    //- Balises pour les performances
+    link(rel='preconnect' href='https://fonts.gstatic.com')
+    link(rel='dns-prefetch' href='//fonts.googleapis.com')
+    
+    //- Balises pour les applications mobiles
+    meta(name='theme-color' content='#0A1A2F')
+    meta(name='apple-mobile-web-app-capable' content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style' content='black-translucent')
+    
+    //- Balises de sécurité
+    meta(http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://kit.fontawesome.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://www.googletagmanager.com https://www.facebook.com https://stats.g.doubleclick.net; font-src 'self' https://fonts.gstatic.com https://kit.fontawesome.com; frame-src https://www.googletagmanager.com https://www.facebook.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.facebook.com https://*.facebook.net https://*.fbcdn.net;")
+    meta(http-equiv='X-Content-Type-Options' content='nosniff')
+    meta(http-equiv='X-Frame-Options' content='DENY')
+    meta(http-equiv='X-XSS-Protection' content='1; mode=block')
+    
+    //- Balises pour les performances (préchargement des ressources critiques)
+    link(rel='preload' as='image' href='/img/hero-bg.jpg')
+    link(rel='preload' as='script' href='/js/main.js')
+    
+    //- Balises pour les PWA (Progressive Web App)
+    link(rel='manifest' href='/manifest.json')
+    meta(name='mobile-web-app-capable' content='yes')
+    
+  body
+    //- En-tête du site
+    include components/header
+    
+    //- Contenu principal
+    main
+      block content
+    
+    //- Pied de page
+    include components/footer
+    
+    //- Scripts en bas de page
+    block scripts
+      script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+      script(src='/js/contact.js')
+      script(src='/js/booking.js')
+    
+    //- Script pour les fonctionnalités d'analyse (chargement non bloquant)
+    script.
+      // Fonction pour charger les scripts d'analyse de manière non bloquante
+      function loadAnalytics() {
+        // Vérifier si le script d'analyse est déjà chargé
+        if (!window.analytics) {
+          const script = document.createElement('script');
+          script.src = '/js/analytics.js';
+          script.async = true;
+          document.head.appendChild(script);
+        }
+      }
+      
+      // Charger les analyses après le chargement de la page
+      if (document.readyState === 'complete') {
+        loadAnalytics();
+      } else {
+        window.addEventListener('load', loadAnalytics);
+      }
+    
+    //- Google Analytics (à décommenter et remplacer avec votre ID de suivi)
+    //- script(async src='https://www.googletagmanager.com/gtag/js?id=G-VOTRE_ID')
+    //- script.
+    //-   window.dataLayer = window.dataLayer || [];
+    //-   function gtag(){dataLayer.push(arguments);}
+    //-   gtag('js', new Date());
+    //-   gtag('config', 'G-VOTRE_ID');
+    
+    //- Facebook Pixel (à décommenter et remplacer avec votre ID de pixel)
+    //- script.
+    //-   !function(f,b,e,v,n,t,s)
+    //-   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    //-   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    //-   if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    //-   n.queue=[];t=b.createElement(e);t.async=!0;
+    //-   t.src=v;s=b.getElementsByTagName(e)[0];
+    //-   s.parentNode.insertBefore(t,s)}(window, document,'script',
+    //-   'https://connect.facebook.net/en_US/fbevents.js');
+    //-   fbq('init', 'VOTRE_ID_PIXEL');
+    //-   fbq('track', 'PageView');
+    //- noscript
+    //-   img(height='1' width='1' style='display:none' src='https://www.facebook.com/tr?id=VOTRE_ID_PIXEL&ev=PageView&noscript=1')

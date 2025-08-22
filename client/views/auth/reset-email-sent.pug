@@ -1,0 +1,17 @@
+extends ../base
+
+block content
+  main.main
+    .email-sent
+      .email-sent__icon
+        svg
+          use(xlink:href='/img/icons.svg#icon-mail')
+      h2.heading-secondary.ma-bt-lg Email de réinitialisation envoyé
+      p.email-sent__text
+        | Nous avons envoyé un email à l'adresse fournie avec les instructions pour réinitialiser votre mot de passe.
+        | Vérifiez votre boîte de réception et suivez le lien fourni.
+      p.email-sent__note
+        | Si vous ne recevez pas l'email dans quelques minutes, vérifiez votre dossier de courrier indésirable ou
+        | 
+        a.link(href='/forgot-password') réessayez
+        | .
