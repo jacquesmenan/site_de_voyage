@@ -19,6 +19,10 @@
     <link rel="stylesheet" href="assets/css/style.css">
     
     <style>
+        .banner-content h1 {
+            color: #FF8C00; /* Orange foncé */
+        }
+        
         .about-hero {
             background: linear-gradient(135deg, rgba(10, 26, 47, 0.92) 0%, rgba(10, 26, 47, 0.88) 100%), 
                         url('assets/images/dubai-skyline.jpg') no-repeat center center/cover;
@@ -174,7 +178,8 @@
         <div class="container">
             <nav class="navbar">
                 <a href="index.html" class="logo">
-                    <img src="assets/logo.jpg.jpg" alt="Cédric Dubai Solutions">
+                    <img src="assets/logo.jpg" alt="Cédric Dubai Solutions" width="200" height="60">
+                    <span class="logo-text">CDS</span>
                 </a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
@@ -193,12 +198,15 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="about-hero">
-        <div class="container">
-            <h1>Qui suis-je ?</h1>
-            <p>Votre expert local pour une expérience inoubliable à Dubaï</p>
+    <div class="banner-container">
+        <div class="banner-overlay">
+            <div class="banner-content">
+                <h1>Qui suis-je ?</h1>
+                <p>Votre expert local pour une expérience inoubliable à Dubaï</p>
+            </div>
         </div>
-    </section>
+        <img src="assets/dubai-banner-optimized.jpg" alt="Dubaï paysage" class="banner-image" loading="lazy">
+    </div>
 
     <!-- About Content -->
     <section class="about-content">

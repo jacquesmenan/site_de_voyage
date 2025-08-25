@@ -24,8 +24,8 @@
         <div class="container">
             <nav class="navbar">
                 <a href="index.html" class="logo">
-                    <img src="assets/logo.jpg.jpg" alt="Cédric Dubai Solutions">
-                    <span class="logo-text">Cédric Dubai Solutions</span>
+                    <img src="assets/logo.jpg" alt="Cédric Dubai Solutions" width="200" height="60">
+                    <span class="logo-text">CDS</span>
                 </a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
@@ -43,17 +43,24 @@
         </div>
     </header>
 
-    <!-- Contact Section -->
-    <section class="contact-section">
-        <div class="container">
-            <div class="section-header">
+    <!-- Contact Hero -->
+    <div class="banner-container">
+        <div class="banner-overlay">
+            <div class="banner-content">
                 <h1>Contactez-nous</h1>
-                <p>Une question ? Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.</p>
+                <p>Une question ? Une demande particulière ? Notre équipe est là pour vous répondre.</p>
             </div>
-            
-            <div class="contact-container">
+        </div>
+        <img src="assets/dubai-banner-optimized.jpg" alt="Dubaï paysage" class="banner-image" loading="lazy">
+    </div>
+
+    <!-- Contact Content -->
+    <section class="about-content">
+        <div class="container">
+            <div class="about-container">
                 <div class="contact-form">
-                    <form id="contactForm" action="#" method="POST">
+                    <h2>Envoyez-nous un message</h2>
+                    <form id="contactForm" action="#" method="POST" class="form">
                         <div class="form-group">
                             <label for="name">Nom complet *</label>
                             <input type="text" id="name" name="name" required>
@@ -77,40 +84,48 @@
                 <div class="contact-info">
                     <div class="info-box">
                         <div class="icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <h3>Email</h3>
-                        <p><a href="mailto:albhexatrading@gmail.com">albhexatrading@gmail.com</a></p>
-                    </div>
-                    
-                    <div class="info-box">
-                        <div class="icon">
-                            <i class="fab fa-whatsapp"></i>
-                        </div>
-                        <h3>WhatsApp</h3>
-                        <p><a href="https://wa.me/971521178780" target="_blank">+971 52 117 8780</a></p>
-                    </div>
-                    
-                    <div class="info-box">
-                        <div class="icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <h3>Localisation</h3>
-                        <p>Dubaï, Émirats Arabes Unis</p>
+                        <div class="info-content">
+                            <h3>Adresse</h3>
+                            <p>Dubaï, Émirats Arabes Unis</p>
+                        </div>
                     </div>
                     
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/share/1GYE2zomnX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/cedric_a_dubai" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon d-none d-md-inline-block"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://www.tiktok.com/@cedric.dubai?_t=ZS-8ynSOgdraWw&_r=1" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                    <div class="info-box">
+                        <div class="icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Téléphone</h3>
+                            <p>+971 52 117 8780</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <div class="icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Email</h3>
+                            <p>albhexatrading@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-section">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/share/1GYE2zomnX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/cedric_a_dubai" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@cedric.dubai" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Google Maps -->
+    <!-- Map Section -->
     <div class="map-container">
         <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d462562.6509701295!2d54.94755563024578!3d25.07575945532335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDuba%C3%AF%20-%20%C3%89mirats%20arabes%20unis!5e0!3m2!1sfr!2sfr!4v1623456789012!5m2!1sfr!2sfr" 
@@ -118,7 +133,8 @@
             height="450" 
             style="border:0;" 
             allowfullscreen="" 
-            loading="lazy">
+            loading="lazy"
+            aria-label="Carte de localisation de Dubaï">
         </iframe>
     </div>
 
