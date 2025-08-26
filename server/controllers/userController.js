@@ -1,4 +1,4 @@
-const User = require('../models/userModel');
+const supabase = require('../config/supabase');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -11,31 +11,52 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+// Fonction utilitaire pour formater la réponse utilisateur (masque les champs sensibles)
+const formatUserResponse = (user) => {
+  if (!user) return null;
+  
+  const { password, passwordChangedAt, created_at, updated_at, ...userData } = user;
+  return userData;
+};
+
 // Récupérer tous les utilisateurs (pour l'admin)
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find().select('-__v -passwordChangedAt');
+  const { data: users, error } = await supabase
+    .from('users')
+    .select('*');
+
+  if (error) {
+    return next(new AppError('Erreur lors de la récupération des utilisateurs', 500));
+  }
+  
+  // Formater la réponse et masquer les champs sensibles
+  const formattedUsers = users.map(user => formatUserResponse(user));
   
   res.status(200).json({
     status: 'success',
-    results: users.length,
+    results: formattedUsers.length,
     data: {
-      users
+      users: formattedUsers
     }
   });
 });
 
 // Récupérer un utilisateur spécifique (pour l'admin)
 exports.getUser = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id).select('-__v -passwordChangedAt');
+  const { data: user, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', req.params.id)
+    .single();
   
-  if (!user) {
+  if (error || !user) {
     return next(new AppError('Aucun utilisateur trouvé avec cet ID', 404));
   }
   
   res.status(200).json({
     status: 'success',
     data: {
-      user
+      user: formatUserResponse(user)
     }
   });
 });
@@ -62,28 +83,46 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'phone',
     'address',
     'city',
-    'postalCode',
+    'postal_code',
     'country',
-    'photo'
+    'photo_url',
+    'bio',
+    'date_of_birth'
   );
 
-  // 3) Mettre à jour le document utilisateur
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true
-  });
+  // 3) Mettre à jour l'utilisateur dans Supabase
+  const { data: updatedUser, error } = await supabase
+    .from('users')
+    .update(filteredBody)
+    .eq('id', req.user.id)
+    .select()
+    .single();
+
+  if (error) {
+    return next(new AppError('Échec de la mise à jour du profil', 400));
+  }
 
   res.status(200).json({
     status: 'success',
     data: {
-      user: updatedUser
+      user: formatUserResponse(updatedUser)
     }
   });
 });
 
 // Désactiver le compte de l'utilisateur connecté (soft delete)
 exports.deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false });
+  const { error } = await supabase
+    .from('users')
+    .update({ active: false, deleted_at: new Date().toISOString() })
+    .eq('id', req.user.id);
+
+  if (error) {
+    return next(new AppError('Échec de la désactivation du compte', 500));
+  }
+
+  // Déconnecter l'utilisateur
+  await supabase.auth.signOut();
 
   res.status(204).json({
     status: 'success',
@@ -93,10 +132,25 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 
 // Supprimer un utilisateur (pour l'admin) - suppression définitive
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndDelete(req.params.id);
+  // Vérifier d'abord si l'utilisateur existe
+  const { data: user, error: fetchError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', req.params.id)
+    .single();
 
-  if (!user) {
+  if (fetchError || !user) {
     return next(new AppError('Aucun utilisateur trouvé avec cet ID', 404));
+  }
+
+  // Supprimer l'utilisateur
+  const { error: deleteError } = await supabase
+    .from('users')
+    .delete()
+    .eq('id', req.params.id);
+
+  if (deleteError) {
+    return next(new AppError('Échec de la suppression de l\'utilisateur', 500));
   }
 
   res.status(204).json({
@@ -127,56 +181,91 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     'phone',
     'address',
     'city',
-    'postalCode',
+    'postal_code',
     'country',
-    'photo'
+    'photo_url',
+    'bio',
+    'date_of_birth',
+    'email_verified',
+    'phone_verified'
   );
 
-  // 3) Mettre à jour le document utilisateur
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, filteredBody, {
-    new: true,
-    runValidators: true
-  });
+  // 3) Mettre à jour l'utilisateur dans Supabase
+  const { data: updatedUser, error } = await supabase
+    .from('users')
+    .update({
+      ...filteredBody,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', req.params.id)
+    .select()
+    .single();
 
-  if (!updatedUser) {
-    return next(new AppError('Aucun utilisateur trouvé avec cet ID', 404));
+  if (error || !updatedUser) {
+    return next(new AppError('Échec de la mise à jour de l\'utilisateur', 400));
   }
 
   res.status(200).json({
     status: 'success',
     data: {
-      user: updatedUser
+      user: formatUserResponse(updatedUser)
     }
   });
 });
 
 // Récupérer le profil de l'utilisateur connecté
-exports.getMe = (req, res, next) => {
-  req.params.id = req.user.id;
-  next();
-};
+exports.getMe = catchAsync(async (req, res, next) => {
+  const { data: user, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', req.user.id)
+    .single();
+
+  if (error || !user) {
+    return next(new AppError('Utilisateur non trouvé', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: formatUserResponse(user)
+    }
+  });
+});
 
 // Activer/désactiver un utilisateur (pour l'admin)
 exports.toggleUserStatus = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  // 1) Vérifier si l'utilisateur existe
+  const { data: user, error: fetchError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', req.params.id)
+    .single();
   
-  if (!user) {
+  if (fetchError || !user) {
     return next(new AppError('Aucun utilisateur trouvé avec cet ID', 404));
   }
   
-  // Bascule le statut actif/inactif
-  user.active = !user.active;
-  await user.save({ validateBeforeSave: false });
+  // 2) Basculer le statut actif
+  const newStatus = !user.active;
+  const { data: updatedUser, error: updateError } = await supabase
+    .from('users')
+    .update({ 
+      active: newStatus,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', req.params.id)
+    .select()
+    .single();
+  
+  if (updateError) {
+    return next(new AppError('Échec de la mise à jour du statut', 500));
+  }
   
   res.status(200).json({
     status: 'success',
     data: {
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        active: user.active
-      }
+      user: formatUserResponse(updatedUser)
     }
   });
 });
@@ -196,29 +285,36 @@ exports.updateUserRole = catchAsync(async (req, res, next) => {
     );
   }
   
-  // Mettre à jour le rôle de l'utilisateur
-  const user = await User.findByIdAndUpdate(
-    req.params.id,
-    { role },
-    {
-      new: true,
-      runValidators: true
-    }
-  );
+  // 1) Vérifier d'abord si l'utilisateur existe
+  const { data: user, error: fetchError } = await supabase
+    .from('users')
+    .select('id, name, email, role')
+    .eq('id', req.params.id)
+    .single();
   
-  if (!user) {
+  if (fetchError || !user) {
     return next(new AppError('Aucun utilisateur trouvé avec cet ID', 404));
+  }
+  
+  // 2) Mettre à jour le rôle de l'utilisateur dans Supabase
+  const { data: updatedUser, error: updateError } = await supabase
+    .from('users')
+    .update({ 
+      role,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', req.params.id)
+    .select('id, name, email, role, active, created_at')
+    .single();
+  
+  if (updateError) {
+    return next(new AppError('Échec de la mise à jour du rôle', 500));
   }
   
   res.status(200).json({
     status: 'success',
     data: {
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
+      user: formatUserResponse(updatedUser)
     }
   });
 });

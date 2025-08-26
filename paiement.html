@@ -18,6 +18,8 @@
     <!-- Stripe.js -->
     <script src="https://js.stripe.com/v3/"></script>
     
+    <!-- Styles personnalisés -->
+    <link rel="stylesheet" href="assets/css/paiement.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/paiement.css">
@@ -80,8 +82,43 @@
                     </div>
                     
                     <div class="securite-info">
-                        <i class="fas fa-lock"></i>
-                        <span>Paiement sécurisé et crypté</span>
+                        <main class="main">
+                            <section class="payment-section">
+                                <div class="container">
+                                    <h1>Paiement sécurisé</h1>
+                                    <p>Veuillez remplir les détails de paiement ci-dessous.</p>
+                                    
+                                    <div class="payment-form">
+                                        <div class="form-group">
+                                            <label for="card-element">
+                                                Informations de carte de crédit ou de débit
+                                            </label>
+                                            <div id="card-element" class="stripe-element">
+                                                <!-- Stripe Card Element sera inséré ici -->
+                                            </div>
+                                            <div id="card-errors" class="stripe-errors" role="alert"></div>
+                                        </div>
+                                        
+                                        <button id="submit-payment" class="btn btn-primary btn-block">
+                                            <span id="button-text">Payer maintenant</span>
+                                            <span id="spinner" class="spinner hidden"></span>
+                                        </button>
+                                        <div id="payment-message" class="hidden"></div>
+                                    </div>
+                                    
+                                    <div class="secure-payment">
+                                        <i class="fas fa-lock"></i>
+                                        <span>Paiement 100% sécurisé par Stripe</span>
+                                        <div class="payment-methods">
+                                            <i class="fab fa-cc-visa"></i>
+                                            <i class="fab fa-cc-mastercard"></i>
+                                            <i class="fab fa-cc-amex"></i>
+                                            <i class="fab fa-cc-discover"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
                     </div>
                 </div>
                 
@@ -152,6 +189,116 @@
         </div>
     </footer>
 
+    <!-- Script de paiement -->
+    <script>
+        // Récupérer l'ID du forfait depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tourId = urlParams.get('tourId');
+        
+        // Initialiser Stripe avec votre clé publique
+        const stripe = Stripe('pk_test_your_public_key_here');
+        
+        // Créer une instance d'éléments Stripe
+        const elements = stripe.elements();
+        
+        // Créer et styliser l'élément de carte
+        const card = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                }
+            }
+        });
+        
+        // Monter l'élément de carte dans le DOM
+        card.mount('#card-element');
+        
+        // Gérer les erreurs de saisie de la carte
+        card.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+                displayError.style.display = 'block';
+            } else {
+                displayError.textContent = '';
+                displayError.style.display = 'none';
+            }
+        });
+        
+        // Gérer la soumission du formulaire
+        const form = document.getElementById('payment-form');
+        const submitButton = document.getElementById('submit-payment');
+        const spinner = document.getElementById('spinner');
+        const buttonText = document.getElementById('button-text');
+        const paymentMessage = document.getElementById('payment-message');
+        
+        if (form) {
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                // Désactiver le bouton pour éviter les soumissions multiples
+                submitButton.disabled = true;
+                spinner.classList.remove('hidden');
+                buttonText.textContent = 'Traitement...';
+                
+                try {
+                    // Créer une session de paiement sur le serveur
+                    const response = await fetch(`/api/v1/bookings/checkout-session/${tourId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include'
+                    });
+                    
+                    const session = await response.json();
+                    
+                    if (session.status === 'success') {
+                        // Rediriger vers la page de paiement Stripe
+                        const result = await stripe.redirectToCheckout({
+                            sessionId: session.session.id
+                        });
+                        
+                        if (result.error) {
+                            throw new Error(result.error.message);
+                        }
+                    } else {
+                        throw new Error('Erreur lors de la création de la session de paiement');
+                    }
+                } catch (err) {
+                    // Afficher l'erreur à l'utilisateur
+                    paymentMessage.textContent = err.message;
+                    paymentMessage.classList.remove('hidden');
+                    console.error('Erreur de paiement:', err);
+                    
+                    // Réactiver le bouton
+                    submitButton.disabled = false;
+                    spinner.classList.add('hidden');
+                    buttonText.textContent = 'Payer maintenant';
+                }
+            });
+        }
+        
+        // Vérifier si nous revenons d'un paiement réussi
+        if (window.location.search.includes('session_id')) {
+            // Afficher un message de confirmation
+            paymentMessage.textContent = 'Paiement réussi ! Merci pour votre achat.';
+            paymentMessage.style.color = '#4BB543';
+            paymentMessage.classList.remove('hidden');
+            
+            // Masquer le formulaire
+            document.querySelector('.payment-form').style.display = 'none';
+        }
+    </script>
+    
     <!-- Scripts -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/paiement.js"></script>

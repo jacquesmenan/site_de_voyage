@@ -1,34 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Récupérer les paramètres d'URL pour le produit sélectionné
+    // Initialisation de Stripe avec votre clé publique
+    const stripe = Stripe('pk_test_your_public_key_here');
+    
+    // Récupérer les éléments du DOM
+    const cardElement = document.getElementById('card-element');
+    const cardErrors = document.getElementById('card-errors');
+    const submitButton = document.getElementById('submit-payment');
+    const spinner = document.getElementById('spinner');
+    const buttonText = document.getElementById('button-text');
+    const paymentMessage = document.getElementById('payment-message');
+    const paymentForm = document.getElementById('payment-form');
+
+    // Vérifier si les éléments nécessaires existent
+    if (!cardElement || !cardErrors || !submitButton || !spinner || !buttonText || !paymentMessage || !paymentForm) {
+        console.error('Un ou plusieurs éléments du formulaire de paiement sont manquants');
+        return;
+    }
+
+    // Récupérer l'ID du forfait depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
-    const product = urlParams.get('product') || 'voyage';
-    
-    // Définir les détails du produit
-    let productDetails = {
-        'voyage': {
-            name: 'Pack Voyage Dubaï',
-            price: 49,
-            description: 'Guide complet pour votre voyage à Dubaï',
-            priceId: 'price_voyage_123' // À remplacer par votre Price ID Stripe
-        },
-        'expatriation': {
-            name: 'Pack Expatriation Dubaï',
-            price: 79,
-            description: 'Guide complet pour votre expatriation à Dubaï',
-            priceId: 'price_expat_456' // À remplacer par votre Price ID Stripe
-        }
-    };
+    const tourId = urlParams.get('tourId');
 
-    // Mettre à jour l'interface avec les détails du produit
-    const selectedProduct = productDetails[product] || productDetails['voyage'];
-    document.getElementById('produit-nom').textContent = selectedProduct.name;
-    document.getElementById('produit-prix').textContent = `${selectedProduct.price} €`;
-    document.getElementById('total-commande').textContent = `${selectedProduct.price} €`;
+    // Vérifier si nous revenons d'un paiement réussi
+    if (window.location.search.includes('session_id')) {
+        // Afficher un message de confirmation
+        paymentMessage.textContent = 'Paiement réussi ! Merci pour votre achat.';
+        paymentMessage.style.color = '#4CAF50';
+        paymentMessage.classList.remove('hidden');
+        
+        // Masquer le formulaire
+        paymentForm.style.display = 'none';
+        return; // Arrêter l'exécution du reste du script
+    }
 
-    // Initialiser Stripe avec votre clé publique
-    const stripe = Stripe('pk_test_votre_cle_publique_stripe');
-    const elements = stripe.elements();
-    
     // Style personnalisé pour les champs de carte
     const style = {
         base: {
@@ -46,95 +50,93 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Créer les éléments de formulaire Stripe
+    // Créer et monter l'élément de carte Stripe
+    const elements = stripe.elements();
     const card = elements.create('card', { style: style });
     card.mount('#card-element');
 
-    // Gérer les erreurs de validation de la carte
+    // Gérer les erreurs de saisie de la carte
     card.on('change', function(event) {
-        const displayError = document.getElementById('card-errors');
         if (event.error) {
-            displayError.textContent = event.error.message;
+            showError(event.error.message);
         } else {
-            displayError.textContent = '';
+            clearError();
         }
     });
 
     // Gérer la soumission du formulaire
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', async function(event) {
+    paymentForm.addEventListener('submit', handleFormSubmit);
+
+    // Fonction pour gérer la soumission du formulaire
+    async function handleFormSubmit(event) {
         event.preventDefault();
         
-        const submitButton = document.getElementById('submit-button');
-        const spinner = document.getElementById('spinner');
-        const buttonText = document.getElementById('button-text');
+        if (!tourId) {
+            showError('Aucun forfait sélectionné. Veuillez réessayer.');
+            return;
+        }
         
-        // Désactiver le bouton et afficher le spinner
-        submitButton.disabled = true;
-        buttonText.textContent = 'Traitement...';
-        spinner.classList.remove('hidden');
+        // Désactiver le bouton pour éviter les soumissions multiples
+        setFormSubmitting(true);
         
         try {
-            // Créer un paiement avec Stripe
-            const { error, paymentMethod } = await stripe.createPaymentMethod({
-                type: 'card',
-                card: card,
-                billing_details: {
-                    name: document.getElementById('name').value
-                }
-            });
-            
-            if (error) {
-                throw error;
-            }
-            
-            // Envoyer le paiement à votre serveur
-            const response = await fetch('/create-payment-intent', {
-                method: 'POST',
+            // Créer une session de paiement sur le serveur
+            const response = await fetch(`/api/v1/bookings/checkout-session/${tourId}`, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    paymentMethodId: paymentMethod.id,
-                    amount: selectedProduct.price * 100, // Montant en centimes
-                    currency: 'eur',
-                    productId: selectedProduct.priceId
-                })
+                credentials: 'include'
             });
             
-            const paymentResponse = await response.json();
-            
-            if (paymentResponse.error) {
-                throw new Error(paymentResponse.error);
+            if (!response.ok) {
+                throw new Error('Erreur réseau lors de la communication avec le serveur');
             }
             
-            // Rediriger vers la page de confirmation en cas de succès
-            window.location.href = `/confirmation.html?payment_intent=${paymentResponse.paymentIntentId}`;
+            const session = await response.json();
             
-        } catch (error) {
-            // Afficher les erreurs
-            const errorElement = document.getElementById('card-errors');
-            errorElement.textContent = error.message || 'Une erreur est survenue lors du traitement du paiement.';
-            
-            // Réactiver le bouton
-            submitButton.disabled = false;
-            buttonText.textContent = 'Payer maintenant';
-            spinner.classList.add('hidden');
+            if (session && session.status === 'success' && session.session) {
+                // Rediriger vers la page de paiement Stripe
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.session.id
+                });
+                
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+            } else {
+                throw new Error(session.message || 'Erreur lors de la création de la session de paiement');
+            }
+        } catch (err) {
+            console.error('Erreur de paiement:', err);
+            showError(err.message || 'Une erreur est survenue lors du traitement de votre paiement');
+            setFormSubmitting(false);
         }
-    });
+    }
+
+    // Fonction pour afficher les erreurs
+    function showError(message) {
+        paymentMessage.textContent = message;
+        paymentMessage.style.color = '#e74c3c';
+        paymentMessage.classList.remove('hidden');
+        
+        cardErrors.textContent = message;
+        cardErrors.style.display = 'block';
+    }
     
-    // Gérer le changement de méthode de paiement
-    document.querySelectorAll('.paiement-methodes > div').forEach(method => {
-        method.addEventListener('click', function() {
-            // Mettre à jour l'interface utilisateur
-            document.querySelectorAll('.paiement-methodes > div').forEach(m => m.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Si PayPal est sélectionné, rediriger vers PayPal
-            if (this.classList.contains('paypal')) {
-                // À implémenter: Redirection vers PayPal
-                alert('Redirection vers PayPal...');
-            }
-        });
-    });
+    // Fonction pour effacer les messages d'erreur
+    function clearError() {
+        paymentMessage.textContent = '';
+        paymentMessage.classList.add('hidden');
+        
+        cardErrors.textContent = '';
+        cardErrors.style.display = 'none';
+    }
+    
+    // Fonction pour gérer l'état du formulaire lors de la soumission
+    function setFormSubmitting(isSubmitting) {
+        submitButton.disabled = isSubmitting;
+        spinner.classList.toggle('hidden', !isSubmitting);
+        buttonText.textContent = isSubmitting ? 'Traitement...' : 'Payer maintenant';
+    }
 });

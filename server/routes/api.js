@@ -1,39 +1,55 @@
 const express = require('express');
 const bookingController = require('../controllers/bookingController');
 const userController = require('../controllers/userController');
-const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
 const contactController = require('../controllers/contactController');
 
 const router = express.Router();
 
-// Routes d'authentification
+// ====================================
+// ROUTES PUBLIQUES
+// ====================================
+
+// Authentification
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
-router.get('/logout', authController.logout);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
-// Routes protégées (nécessite une authentification)
-router.use(authController.protect);
+// Paiements Stripe
+router.get('/bookings/checkout-session/:tourId', bookingController.getCheckoutSession);
 
-// Routes pour les utilisateurs
-router.get('/me', userController.getMe, userController.getUser);
-router.patch('/updateMyPassword', authController.updatePassword);
-router.patch('/updateMe', userController.updateMe);
-router.delete('/deleteMe', userController.deleteMe);
+// Webhook Stripe (doit être public et accepter du JSON brut)
+router.post(
+  '/bookings/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
-// Routes pour les réservations
-router.get('/bookings/checkout-session/:packageId', bookingController.getCheckoutSession);
-router.get('/my-bookings', bookingController.getMyBookings);
-
-// Routes pour le formulaire de contact
+// Formulaire de contact
 router.post('/contact', contactController.sendContactForm);
 
-// Routes protégées et restreintes aux administrateurs
+// ====================================
+// ROUTES PROTÉGÉES (authentification requise)
+// ====================================
+router.use(authController.protect);
+
+// Gestion du compte utilisateur
+router.get('/users/me', userController.getMe, userController.getUser);
+router.patch('/users/updateMyPassword', authController.updatePassword);
+router.patch('/users/updateMe', userController.updateMe);
+router.delete('/users/deleteMe', userController.deleteMe);
+
+// Réservations de l'utilisateur connecté
+router.get('/bookings/my-bookings', bookingController.getMyBookings);
+router.post('/bookings/check-availability/:tourId', bookingController.checkAvailability);
+
+// ====================================
+// ROUTES ADMIN (authentification + droits admin requis)
+// ====================================
 router.use(authController.restrictTo('admin'));
 
-// Routes d'administration pour les utilisateurs
+// Gestion des utilisateurs (admin)
 router
   .route('/users')
   .get(userController.getAllUsers)
@@ -45,7 +61,7 @@ router
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
-// Routes d'administration pour les réservations
+// Gestion des réservations (admin)
 router
   .route('/bookings')
   .get(bookingController.getAllBookings)
@@ -55,6 +71,6 @@ router
   .route('/bookings/:id')
   .get(bookingController.getBooking)
   .patch(bookingController.updateBooking)
-  .delete(bookingController.deleteBooking);
+  .delete(bookingController.cancelBooking);
 
 module.exports = router;

@@ -5,7 +5,10 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-// Fonction pour créer une session de paiement Stripe
+/**
+ * Fonction utilitaire pour créer une réservation après un paiement réussi
+ * @param {Object} session - La session Stripe
+ */
 const createBookingCheckout = async session => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
@@ -14,15 +17,24 @@ const createBookingCheckout = async session => {
   await Booking.create({ tour, user, price });
 };
 
-// Middleware pour créer une session de paiement
-exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+/**
+ * Crée une session de paiement Stripe
+ * @route GET /api/v1/bookings/checkout-session/:tourId
+ * @access Privé
+ */
+exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Récupérer le forfait actuellement réservé
   const tour = await Tour.findById(req.params.tourId);
+  
+  if (!tour) {
+    return next(new AppError('Aucun forfait trouvé avec cet ID', 404));
+  }
   
   // 2) Créer la session de paiement
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    success_url: `${req.protocol}://${req.get('host')}/mes-reservations?alert=booking`,
+    mode: 'payment',
+    success_url: `${req.protocol}://${req.get('host')}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -31,16 +43,17 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: `${tour.name} - Forfait`,
+            name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://www.cedricdubaisolutions.com/img/tours/${tour.imageCover}`],
+            images: [
+              `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`
+            ],
           },
-          unit_amount: tour.price * 100, // en centimes
+          unit_amount: tour.price * 100, // Convertir en centimes
         },
         quantity: 1,
       },
     ],
-    mode: 'payment',
   });
 
   // 3) Envoyer la session comme réponse
@@ -50,25 +63,34 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   });
 });
 
-// Gestion du webhook Stripe (pour les paiements réussis)
+/**
+ * Gestion du webhook Stripe pour les paiements réussis
+ * @route POST /api/v1/bookings/webhook-checkout
+ * @access Public (appelé par Stripe)
+ */
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
 
   try {
+    // Vérifier la signature du webhook
     event = stripe.webhooks.constructEvent(
       req.body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    return res.status(400).send(`Webhook error: ${err.message}`);
+    console.error(`⚠️  Webhook signature verification failed: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // Gérer l'événement de paiement réussi
   if (event.type === 'checkout.session.completed') {
-    createBookingCheckout(event.data.object);
+    createBookingCheckout(event.data.object)
+      .catch(err => console.error('Error creating booking:', err));
   }
 
+  // Renvoyer une réponse pour confirmer la réception du webhook
   res.status(200).json({ received: true });
 };
 
