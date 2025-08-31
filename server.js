@@ -1,31 +1,45 @@
-// Version ultra-simplifiée du serveur
-const express = require('express');
+// Point d'entrée principal de l'application
+require('dotenv').config({ path: './config.env' });
+const app = require('./server/app');
+const connectDB = require('./server/config/mongoConfig');
 
-// Création de l'application Express
-const app = express();
+// Connexion à la base de données MongoDB
+connectDB();
 
-// Middleware de base
-app.use(express.json());
-
-// Route de test simple
-app.get('/test', (req, res) => {
-  res.send('Le serveur fonctionne !');
+// Démarrage du serveur
+const port = process.env.PORT || 3000;
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`🚀 Application en cours d'exécution sur le port ${port}...`);
+  console.log(`🌍 Environnement: ${process.env.NODE_ENV || 'development'}`);
+  console.log('🔗 API disponible à: http://localhost:' + port + '/api/v1');
+  console.log('🔗 Testez l\'API à: http://localhost:' + port + '/api/v1/test');
 });
 
-// Gestion des erreurs 404
-app.use((req, res) => {
-  res.status(404).send('Page non trouvée');
+// Gestion des erreurs non gérées
+process.on('unhandledRejection', (err) => {
+  console.error('ERREUR NON GÉRÉE ! 💥 Arrêt...');
+  console.error(err.name, err.message);
+  
+  // Fermer le serveur de manière gracieuse
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
 });
 
-// Gestion des erreurs globales
-app.use((err, req, res, next) => {
-  console.error('Erreur:', err);
-  res.status(500).send('Une erreur est survenue');
-});
-
-// Démarrer le serveur sur le port 3001 (au cas où le port 3000 serait occupé)
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur http://localhost:${PORT}`);
-  console.log('Testez en accédant à http://localhost:3001/test');
+// Gestion des exceptions non capturées
+process.on('uncaughtException', err => {
+  console.error('ERREUR NON CAPTURÉE ! 💥 Arrêt...');
+  console.error(err.name, err.message);
+  
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
 });

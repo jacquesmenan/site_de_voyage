@@ -169,6 +169,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run on scroll
     window.addEventListener('scroll', highlightNavigation);
     
+    // Show/hide back to top button on scroll
+    window.addEventListener('scroll', toggleBackToTop);
+    
     // Initialize tooltips if any
     const initTooltips = function() {
         const tooltips = document.querySelectorAll('[data-tooltip]');
@@ -281,15 +284,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Toggle back to top button on scroll
-    window.addEventListener('scroll', toggleBackToTop);
-    
-    // Initialize AOS (Animate On Scroll) if needed
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
+    // Enregistrer le Service Worker pour le mode hors ligne
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker enregistré avec succès: ', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Échec de l\'enregistrement du ServiceWorker: ', error);
+                });
         });
     }
 });

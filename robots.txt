@@ -1,0 +1,14 @@
+# Fichier robots.txt pour Cédric Dubai Solutions
+User-agent: *
+Allow: /
+
+# Fichiers et dossiers à ignorer
+Disallow: /admin/
+Disallow: /config/
+Disallow: /node_modules/
+Disallow: /vendor/
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Sitemap
+Sitemap: https://www.cedricdubai.com/sitemap.xml

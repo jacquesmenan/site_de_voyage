@@ -22,6 +22,75 @@
 }
 
 /* =================================
+   Accessibilité
+   ================================= */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: white;
+    padding: 8px 16px;
+    z-index: 100;
+    transition: transform 0.3s;
+}
+
+.skip-link:focus {
+    transform: translateY(40px);
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    position: relative;
+    z-index: 1;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+    :root {
+        --color-text: #000000;
+        --color-primary: #0056b3;
+    }
+    
+    .btn {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* =================================
    Reset & Base Styles
    ================================= */
 *,
@@ -1245,7 +1314,7 @@ ul {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .btn-primary:hover {
@@ -1366,6 +1435,62 @@ ul {
     
     .social-links {
         justify-content: center;
+    }
+}
+
+/* =================================
+   Back to Top Button
+   ================================= */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    transform: translateY(-5px);
+}
+
+.back-to-top:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.3);
+}
+
+/* Styles pour le mode somme et contraste élevé */
+@media (prefers-color-scheme: dark) {
+    .back-to-top {
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+    }
+    
+    .back-to-top:hover {
+        background-color: var(--color-secondary);
+        color: var(--color-white);
     }
 }
 

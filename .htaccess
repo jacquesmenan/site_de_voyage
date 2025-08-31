@@ -1,3 +1,32 @@
+# =================================
+# EN-TÊTES DE SÉCURITÉ
+# =================================
+<IfModule mod_headers.c>
+    # Protection contre le détournement de clics (Clickjacking)
+    Header always append X-Frame-Options SAMEORIGIN
+    
+    # Protection contre les attaques XSS (Cross-Site Scripting)
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Empêcher le navigateur de détecter automatiquement le type MIME
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Politique de sécurité du contenu (CSP) - À personnaliser selon vos besoins
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self';"
+    
+    # Référent Policy
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Feature Policy - Désactive les fonctionnalités potentiellement dangereuses
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    
+    # HSTS (HTTP Strict Transport Security) - À décommenter en production avec HTTPS
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# =================================
+# OPTIMISATION DES PERFORMANCES
+# =================================
 # Activer la compression GZIP
 <IfModule mod_deflate.c>
   # Compresser le HTML, CSS, JavaScript, Text, XML et les polices
@@ -90,3 +119,38 @@ Options -Indexes
   Order Allow,Deny
   Allow from all
 </FilesMatch>
+
+# Bloquer l'accès aux fichiers sensibles
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Bloquer l'accès aux fichiers de sauvegarde
+<FilesMatch "\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])$">
+  Order allow,deny
+  Deny from all
+  Satisfy All
+</FilesMatch>
+
+# Bloquer l'accès aux dossiers système
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Rediriger www vers non-www (ou l'inverse selon votre préférence)
+  # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  # RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+  
+  # Forcer HTTPS - À décommenter en production avec certificat SSL
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # Rediriger les erreurs 404 vers une page personnalisée
+  # ErrorDocument 404 /404.html
+</IfModule>
+
+# Désactiver le suivi des liens symboliques
+Options +FollowSymLinks -SymLinksIfOwnerMatch
+
+# Désactiver le serveur signature
+ServerSignature Off

@@ -1,0 +1,95 @@
+doctype html
+html(lang='fr')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Confirmation de votre réservation
+    style(type='text/css').
+      body {
+        font-family: 'Open Sans', Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 2px solid #CFAF6E;
+        margin-bottom: 20px;
+      }
+      .header img {
+        max-width: 200px;
+        height: auto;
+      }
+      .content {
+        padding: 0 20px 20px;
+      }
+      h1 {
+        color: #0A1A2F;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      p {
+        margin-bottom: 15px;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 25px;
+        margin: 20px 0;
+        background-color: #CFAF6E;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .booking-details {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 20px 0;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        font-size: 12px;
+        color: #777;
+      }
+  body
+    .container
+      .header
+        h1 Cédric Dubai Solutions
+      .content
+        h1 Confirmation de votre réservation
+        p Bonjour #{firstName},<br>Nous avons bien reçu votre demande de réservation. Voici un récapitulatif :
+        
+        .booking-details
+          h3 Détails de la réservation :
+          p Date d'arrivée: #{booking.checkIn}
+          p Date de départ: #{booking.checkOut}
+          p Type de logement: #{booking.roomType}
+          p Nombre de voyageurs: #{booking.guests}
+          p Montant total: #{booking.totalAmount} €
+          p Numéro de réservation: #{booking.bookingNumber}
+        
+        p Pour modifier ou annuler votre réservation, veuillez nous contacter à l'adresse suivante : contact@cedricdubaisolutions.com
+        
+        p Nous vous remercions de votre confiance et nous nous réjouissons de vous accueillir bientôt !
+        
+        p Cordialement,<br>L'équipe Cédric Dubai Solutions
+      
+      .footer
+        p © 2025 Cédric Dubai Solutions. Tous droits réservés.
+        p Cet email a été envoyé à #{to}
+        p Pour toute question, contactez-nous à contact@cedricdubaisolutions.com

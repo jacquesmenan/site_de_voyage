@@ -1,0 +1,89 @@
+doctype html
+html(lang='fr')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Nouveau message de contact
+    style(type='text/css').
+      body {
+        font-family: 'Open Sans', Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 2px solid #CFAF6E;
+        margin-bottom: 20px;
+      }
+      .header img {
+        max-width: 200px;
+        height: auto;
+      }
+      .content {
+        padding: 0 20px 20px;
+      }
+      h1 {
+        color: #0A1A2F;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      p {
+        margin-bottom: 15px;
+      }
+      .message-box {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 20px 0;
+        border-left: 4px solid #CFAF6E;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        font-size: 12px;
+        color: #777;
+      }
+  body
+    .container
+      .header
+        h1 Cédric Dubai Solutions
+      .content
+        h1 Nouveau message de contact
+        p Vous avez reçu un nouveau message via le formulaire de contact :
+        
+        .message-box
+          p 
+            strong De :
+            |  #{message.name} (#{message.email})
+          p 
+            strong Sujet :
+            |  #{message.subject}
+          p 
+            strong Message :
+            br
+            | #{message.message}
+        
+        p 
+          | Pour répondre à ce message, veuillez utiliser l'adresse email fournie : 
+          a(href=`mailto:${message.email}`) #{message.email}
+        
+        p 
+          | Ce message a été envoyé depuis le site Cédric Dubai Solutions.
+      
+      .footer
+        p © 2025 Cédric Dubai Solutions. Tous droits réservés.
+        p Date d'envoi : #{new Date().toLocaleString('fr-FR')}
